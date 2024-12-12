@@ -34,6 +34,8 @@ Repository = "https://github.com/phuongho43/fluoressential"
 
 [project.scripts]
 main = "fluoressential.main:main"
+plot_dynamics = "fluoressential.plot_dynamics:main"
+plot_groups = "fluoressential.plot_groups:main"
 
 [tool.uv]
 dev-dependencies = [

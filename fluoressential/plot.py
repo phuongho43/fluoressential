@@ -1,36 +1,14 @@
 import os
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from matplotlib import font_manager
 from matplotlib import patches as mpatches
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 
-CUSTOM_PALETTE = ["#648FFF", "#785EF0", "#FE6100", "#29CA6E", "#DC267F", "#FFB000", "#34495E"]
-
-CUSTOM_STYLE = {
-    "image.cmap": "turbo",
-    "figure.figsize": (24, 16),
-    "text.color": "#212121",
-    "axes.titleweight": "bold",
-    "axes.titlesize": 80,
-    "axes.titlepad": 12,
-    "axes.spines.top": False,
-    "axes.spines.right": False,
-    "axes.labelpad": 12,
-    "axes.labelcolor": "#212121",
-    "axes.labelweight": 600,
-    "axes.linewidth": 4,
-    "axes.edgecolor": "#212121",
-    "grid.linewidth": 4,
-    "xtick.major.pad": 12,
-    "ytick.major.pad": 12,
-    "lines.linewidth": 10,
-    "axes.labelsize": 80,
-    "xtick.labelsize": 72,
-    "ytick.labelsize": 72,
-    "legend.fontsize": 64,
-}
+from fluoressential.style import STYLE
 
 
 def plot_fluor_img(
@@ -53,7 +31,7 @@ def plot_fluor_img(
             with their assigned number
         roi_n0 (int): starting number of the roi counter
     """
-    with plt.style.context(("seaborn-v0_8-whitegrid", CUSTOM_STYLE)):
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
         fig, ax = plt.subplots(figsize=(24, 16))
         axim = ax.imshow(img, cmap="turbo")
         axim.set_clim(0.0, cbar_max)
@@ -126,7 +104,7 @@ def plot_bgd_prof(fig_fp, img, bgd):
         img (2D array): the raw/unprocessed image before background subtraction
         bgd (2D array): the approx background image
     """
-    with plt.style.context(("seaborn-v0_8-whitegrid", CUSTOM_STYLE)):
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
         bg_rows = np.argsort(np.var(img, axis=1))[-100:-1:10]
         row_i = np.random.choice(bg_rows.shape[0])
         bg_row = bg_rows[row_i]

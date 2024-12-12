@@ -1,10 +1,27 @@
+from pathlib import Path
+
 import numpy as np
+import pandas as pd
+from filetype import is_image
+from natsort import natsorted
 from skimage import img_as_float
 from skimage.filters import gaussian, threshold_li
 from skimage.io import imread
 from skimage.restoration import estimate_sigma
 
-from fluoressential.utils import list_img_files
+
+def list_img_fps(dp):
+    """List the filepaths for all images in the specified directory.
+
+    Args:
+        dp (str): absolute path of images directory
+
+    Returns:
+        img_files (list): absolute paths for each image file
+    """
+    all_fps = natsorted(Path(dp).glob("*"))
+    img_fps = [fp for fp in all_fps if is_image(fp)]
+    return img_fps
 
 
 def subtract_bgd(img_fp, n_thr=1, gau_scale=1, vert_scale=1, ct_cutoff=0.1):
@@ -49,7 +66,7 @@ def subtract_bgd(img_fp, n_thr=1, gau_scale=1, vert_scale=1, ct_cutoff=0.1):
     return img, raw, bgd
 
 
-def calc_cbar_max(img_dp):
+def calc_cbar_max(imgs_dp):
     """Calculate the maximum colorbar value to use across all images in the directory.
 
     Useful for having a consistent colorbar scale across all images in an experiment or timelapse
@@ -61,8 +78,21 @@ def calc_cbar_max(img_dp):
     Returns:
         cbar_max (float): colorbar scale max value across all images
     """
-    img_files = list_img_files(img_dp)
-    max_vals = [np.percentile(img_as_float(imread(img_fp)), 99.99) for img_fp in img_files]
-    max_img_fp = img_files[np.argmax(max_vals)]
+    img_fps = list_img_fps(imgs_dp)
+    max_vals = [np.percentile(img_as_float(imread(img_fp)), 99.99) for img_fp in img_fps]
+    max_img_fp = img_fps[np.argmax(max_vals)]
     cbar_max = np.percentile(subtract_bgd(max_img_fp)[0], 99.99)
     return cbar_max
+
+
+def calc_ave_regimes(y_csv_fp, regimes):
+    y_df = pd.read_csv(y_csv_fp)
+    ave_dfs = []
+    for h, [t1, t2] in enumerate(regimes):
+        ave_df = y_df.loc[(y_df["t"] >= t1) & (y_df["t"] < t2), ["y", "n"]].copy()
+        ave_df = ave_df.groupby("n", as_index=False)["y"].mean()
+        ave_df["h"] = np.ones_like(ave_df["y"]) * h
+        ave_dfs.append(ave_df)
+    ave_regimes_df = pd.concat(ave_dfs)
+    ave_regimes_df.columns = ["repeat", "response", "group"]
+    return ave_regimes_df
