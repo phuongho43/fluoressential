@@ -96,3 +96,17 @@ def calc_ave_regimes(y_csv_fp, regimes):
     ave_regimes_df = pd.concat(ave_dfs)
     ave_regimes_df.columns = ["repeat", "response", "group"]
     return ave_regimes_df
+
+
+def calc_log2_ratio(y_csv_fp):
+    y_df = pd.read_csv(y_csv_fp)
+    if "class" in y_df.columns:
+        for c in y_df["class"].unique():
+            for r in y_df["repeat"].unique():
+                ygi = y_df.loc[(y_df["class"] == c) & (y_df["repeat"] == r), "response"]
+                y_df.loc[(y_df["class"] == c) & (y_df["repeat"] == r), "response"] = np.log2(ygi / ygi.iloc[0])
+    else:
+        for r in y_df["repeat"].unique():
+            ygi = y_df.loc[(y_df["repeat"] == r), "response"]
+            y_df.loc[(y_df["repeat"] == r), "response"] = np.log2(ygi / ygi.iloc[0])
+    return y_df

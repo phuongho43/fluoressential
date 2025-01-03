@@ -9,17 +9,7 @@ import seaborn as sns
 from fluoressential.style import PALETTE, STYLE, STYLE_LARGE
 
 
-def plot_dynamics(
-    fig_fp,
-    y_csv_fps,
-    group_labels,
-    u_csv_fp=None,
-    xlabel="Time",
-    ylabel="AU",
-    figsize=(24, 16),
-    palette=PALETTE,
-    rc_params=STYLE,
-):
+def plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp=None, xlabel="Time", ylabel="AU", figsize=(24, 16), palette=PALETTE, rc_params=STYLE):
     """Plot dynamics timeseries data.
 
     Args:
@@ -75,9 +65,7 @@ def main():
     xlabel = "Time (s)"
     ylabel = r"$\mathbf{\Delta F/F_{0}}$"
     palette = ["#34495E", "#2ECC71", "#D143A4"]
-    plot_dynamics(
-        fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE
-    )
+    plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
     fig_fp = "/home/phuong/data/phd-project/figures/fig_2f.png"
     y_csv_fps = [
@@ -90,9 +78,7 @@ def main():
         "LIDfast",
         "LIDslow",
     ]
-    plot_dynamics(
-        fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE
-    )
+    plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
     fig_fp = "/home/phuong/data/phd-project/figures/fig_2i.png"
     y_csv_fps = [
@@ -103,9 +89,7 @@ def main():
         "Sparse\nDecoder",
     ]
     palette = ["#EA822C"]
-    plot_dynamics(
-        fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE
-    )
+    plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
 
 if __name__ == "__main__":
