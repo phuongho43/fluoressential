@@ -50,35 +50,35 @@ def plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp=None, xlabel="Time",
 
 
 def main():
-    fig_fp = "/home/phuong/data/phd-project/figures/fig_2c.png"
-    y_csv_fps = [
-        "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/y.csv",
-        "/home/phuong/data/phd-project/1--biosensor/1--LOV/0--I427V/results/y.csv",
-        "/home/phuong/data/phd-project/1--biosensor/1--LOV/1--V416I/results/y.csv",
-    ]
-    group_labels = [
-        "ddFP",
-        "LOVfast",
-        "LOVslow",
-    ]
-    u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/u.csv"
+    # fig_fp = "/home/phuong/data/phd-project/figures/fig_2c.png"
+    # y_csv_fps = [
+    #     "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/y.csv",
+    #     "/home/phuong/data/phd-project/1--biosensor/1--LOV/0--I427V/results/y.csv",
+    #     "/home/phuong/data/phd-project/1--biosensor/1--LOV/1--V416I/results/y.csv",
+    # ]
+    # group_labels = [
+    #     "ddFP",
+    #     "LOVfast",
+    #     "LOVslow",
+    # ]
+    # u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/u.csv"
     xlabel = "Time (s)"
     ylabel = r"$\mathbf{\Delta F/F_{0}}$"
-    palette = ["#34495E", "#2ECC71", "#D143A4"]
-    plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
+    # palette = ["#34495E", "#2ECC71", "#D143A4"]
+    # plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
-    fig_fp = "/home/phuong/data/phd-project/figures/fig_2f.png"
-    y_csv_fps = [
-        "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/y.csv",
-        "/home/phuong/data/phd-project/1--biosensor/2--LID/0--I427V/results/y.csv",
-        "/home/phuong/data/phd-project/1--biosensor/2--LID/1--V416I/results/y.csv",
-    ]
-    group_labels = [
-        "ddFP",
-        "LIDfast",
-        "LIDslow",
-    ]
-    plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
+    # fig_fp = "/home/phuong/data/phd-project/figures/fig_2f.png"
+    # y_csv_fps = [
+    #     "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/y.csv",
+    #     "/home/phuong/data/phd-project/1--biosensor/2--LID/0--I427V/results/y.csv",
+    #     "/home/phuong/data/phd-project/1--biosensor/2--LID/1--V416I/results/y.csv",
+    # ]
+    # group_labels = [
+    #     "ddFP",
+    #     "LIDfast",
+    #     "LIDslow",
+    # ]
+    # plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
     fig_fp = "/home/phuong/data/phd-project/figures/fig_2i.png"
     y_csv_fps = [

@@ -33,7 +33,7 @@ dependencies = [
 Repository = "https://github.com/phuongho43/fluoressential"
 
 [project.scripts]
-main = "fluoressential.main:main"
+process_imgs = "fluoressential.process_imgs:main"
 plot_dynamics = "fluoressential.plot_dynamics:main"
 plot_groups = "fluoressential.plot_groups:main"
 

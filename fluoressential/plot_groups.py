@@ -130,21 +130,33 @@ def main():
     # class_labels = ["Reporter Only", "Dense-RFP"]
     # palette = ["#34495E", "#8069EC"]
     # xlabel = r"$\mathdefault{Input\ Intensity\ (\mu W/mm^2)}$"
-    # ylabel = r"$\mathdefault{Log_2\ Norm.\ Fluor.}$"
+    # ylabel = r"$\mathdefault{Log_2\ Norm.\ Output}$"
     # y_norm_df = calc_log2_ratio(y_csv_fp)
     # y_csv_fp = "/home/phuong/data/phd-project/2--expression/0--HEK-BL-intensity/results/y_norm.csv"
     # y_norm_df.to_csv(y_csv_fp, index=False)
     # plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
 
-    fig_fp = "/home/phuong/data/phd-project/figures/fig_3c.png"
-    y_csv_fp = "/home/phuong/data/phd-project/2--expression/1--HEK-FM_single/results/y.csv"
-    group_labels = ["0", "0.05", "0.1", "0.25", "0.5", "1"]
-    class_labels = ["Dense-RFP", "Sparse-RFP"]
+    # fig_fp = "/home/phuong/data/phd-project/figures/fig_3c.png"
+    # y_csv_fp = "/home/phuong/data/phd-project/2--expression/1--HEK-FM_single/results/y.csv"
+    # group_labels = ["0", "0.05", "0.1", "0.25", "0.5", "1"]
+    # class_labels = ["Dense-RFP", "Sparse-RFP"]
+    # palette = ["#8069EC", "#EA822C"]
+    # xlabel = r"$\mathdefault{Input\ Pulse\ Freq.\ (Hz)}$"
+    # ylabel = r"$\mathdefault{Log_2\ Norm.\ Output}$"
+    # y_norm_df = calc_log2_ratio(y_csv_fp)
+    # y_csv_fp = "/home/phuong/data/phd-project/2--expression/1--HEK-FM_single/results/y_norm.csv"
+    # y_norm_df.to_csv(y_csv_fp, index=False)
+    # plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
+
+    fig_fp = "/home/phuong/data/phd-project/figures/fig_3e.png"
+    y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y.csv"
+    group_labels = ["None\nInput", "Sparse\nInput", "Dense\nInput"]
+    class_labels = ["Dense-YFP", "Sparse-RFP"]
     palette = ["#8069EC", "#EA822C"]
-    xlabel = r"$\mathdefault{FM\ Input\ (Hz)}$"
-    ylabel = r"$\mathdefault{Log_2\ Norm.\ Fluor.}$"
+    xlabel = ""
+    ylabel = r"$\mathdefault{Log_2\ Norm.\ Output}$"
     y_norm_df = calc_log2_ratio(y_csv_fp)
-    y_csv_fp = "/home/phuong/data/phd-project/2--expression/1--HEK-FM_single/results/y_norm.csv"
+    y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y_norm.csv"
     y_norm_df.to_csv(y_csv_fp, index=False)
     plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
 
