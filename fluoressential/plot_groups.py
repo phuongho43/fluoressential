@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from fluoressential.process import calc_log2_ratio
 from fluoressential.style import PALETTE, STYLE_LARGE
 
 
@@ -148,16 +147,29 @@ def main():
     # y_norm_df.to_csv(y_csv_fp, index=False)
     # plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
 
-    fig_fp = "/home/phuong/data/phd-project/figures/fig_3e.png"
-    y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y.csv"
-    group_labels = ["None\nInput", "Sparse\nInput", "Dense\nInput"]
-    class_labels = ["Dense-YFP", "Sparse-RFP"]
+    # fig_fp = "/home/phuong/data/phd-project/figures/fig_3e.png"
+    # y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y.csv"
+    # group_labels = ["None\nInput", "Sparse\nInput", "Dense\nInput"]
+    # class_labels = ["Dense-YFP", "Sparse-RFP"]
+    # palette = ["#8069EC", "#EA822C"]
+    # xlabel = ""
+    # ylabel = r"$\mathdefault{Log_2\ Norm.\ Output}$"
+    # y_norm_df = calc_log2_ratio(y_csv_fp)
+    # y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y_norm.csv"
+    # y_norm_df.to_csv(y_csv_fp, index=False)
+    # plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
+
+    fig_fp = "/home/phuong/data/phd-project/figures/fig_4c.png"
+    y_csv_fp = "/home/phuong/data/phd-project/3--antigen/1--CAR-killing-assay/y.csv"
+    group_labels = [
+        "None\nInput",
+        "Sparse\nInput",
+        "Dense\nInput",
+    ]
+    class_labels = ["Dense-CD19", "Sparse-PSMA"]
     palette = ["#8069EC", "#EA822C"]
     xlabel = ""
-    ylabel = r"$\mathdefault{Log_2\ Norm.\ Output}$"
-    y_norm_df = calc_log2_ratio(y_csv_fp)
-    y_csv_fp = "/home/phuong/data/phd-project/2--expression/2--HEK-FM_dual/results/y_norm.csv"
-    y_norm_df.to_csv(y_csv_fp, index=False)
+    ylabel = "% Cytotoxicity"
     plot_class_groups(fig_fp, y_csv_fp, class_labels, group_labels, xlabel, ylabel, palette=palette)
 
 

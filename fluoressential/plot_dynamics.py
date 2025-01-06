@@ -23,7 +23,6 @@ def plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp=None, xlabel="Time",
         fig, ax = plt.subplots(figsize=figsize)
         handles = []
         lw = rc_params["lines.linewidth"]
-        lws = [lw * i for i in [1.0, 0.75, 0.5, 0.25, 0.1]]
         if u_csv_fp is not None:
             u_df = pd.read_csv(u_csv_fp)
             u_df = u_df.groupby("t", as_index=False)["u"].agg(["mean"])
@@ -36,7 +35,7 @@ def plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp=None, xlabel="Time",
             group_labels.insert(0, "Input")
         for i, y_csv_fp in enumerate(y_csv_fps):
             y_df = pd.read_csv(y_csv_fp)
-            sns.lineplot(ax=ax, data=y_df, x="t", y="y", errorbar=("se", 1.96), color=palette[i], lw=lws[i])
+            sns.lineplot(ax=ax, data=y_df, x="t", y="y", errorbar=("se", 1.96), color=palette[i], lw=lw)
             handles.append(mpl.lines.Line2D([], [], color=palette[i], lw=lw))
         ax.legend(handles, group_labels, loc="best")
         ax.set_xlabel(xlabel)
@@ -62,8 +61,8 @@ def main():
     #     "LOVslow",
     # ]
     # u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/u.csv"
-    xlabel = "Time (s)"
-    ylabel = r"$\mathbf{\Delta F/F_{0}}$"
+    # xlabel = "Time (s)"
+    # ylabel = r"$\mathbf{\Delta F/F_{0}}$"
     # palette = ["#34495E", "#2ECC71", "#D143A4"]
     # plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
@@ -78,17 +77,42 @@ def main():
     #     "LIDfast",
     #     "LIDslow",
     # ]
+    # u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/0--ddFP/results/u.csv"
+    # xlabel = "Time (s)"
+    # ylabel = r"$\mathbf{\Delta F/F_{0}}$"
+    # palette = ["#34495E", "#2ECC71", "#D143A4"]
     # plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
-    fig_fp = "/home/phuong/data/phd-project/figures/fig_2i.png"
+    # fig_fp = "/home/phuong/data/phd-project/figures/fig_2i.png"
+    # y_csv_fps = [
+    #     "/home/phuong/data/phd-project/1--biosensor/3--sparser/results/y.csv",
+    # ]
+    # u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/3--sparser/results/u.csv"
+    # group_labels = [
+    #     "Sparse\nDecoder",
+    # ]
+    # xlabel = "Time (s)"
+    # ylabel = r"$\mathbf{\Delta F/F_{0}}$"
+    # palette = ["#EA822C"]
+    # plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
+
+    fig_fp = "/home/phuong/data/phd-project/figures/fig_4f.png"
     y_csv_fps = [
-        "/home/phuong/data/phd-project/1--biosensor/3--sparser/results/y.csv",
+        "/home/phuong/data/phd-project/3--antigen/2--mouse-expt/0.csv",
+        "/home/phuong/data/phd-project/3--antigen/2--mouse-expt/1.csv",
+        "/home/phuong/data/phd-project/3--antigen/2--mouse-expt/2.csv",
+        "/home/phuong/data/phd-project/3--antigen/2--mouse-expt/3.csv",
     ]
-    u_csv_fp = "/home/phuong/data/phd-project/1--biosensor/3--sparser/results/u.csv"
+    u_csv_fp = None
     group_labels = [
-        "Sparse\nDecoder",
+        "Dense-CD19 (Dense Input)",
+        "Sparse-PSMA (Dense Input)",
+        "Dense-CD19 (Sparse Input)",
+        "Sparse-PSMA (Sparse Input)",
     ]
-    palette = ["#EA822C"]
+    xlabel = "Time (d)"
+    ylabel = "Total Flux (p/s)"
+    palette = ["#8069EC", "#EA822C", "#8069EC", "#EA822C"]
     plot_dynamics(fig_fp, y_csv_fps, group_labels, u_csv_fp, xlabel=xlabel, ylabel=ylabel, palette=palette, rc_params=STYLE_LARGE)
 
 
