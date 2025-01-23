@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 from filetype import is_image
 from natsort import natsorted
 from skimage import img_as_float
@@ -83,30 +82,3 @@ def calc_cbar_max(imgs_dp):
     max_img_fp = img_fps[np.argmax(max_vals)]
     cbar_max = np.percentile(subtract_bgd(max_img_fp)[0], 99.99)
     return cbar_max
-
-
-def calc_ave_regimes(y_csv_fp, regimes):
-    y_df = pd.read_csv(y_csv_fp)
-    ave_dfs = []
-    for h, [t1, t2] in enumerate(regimes):
-        ave_df = y_df.loc[(y_df["t"] >= t1) & (y_df["t"] < t2), ["y", "n"]].copy()
-        ave_df = ave_df.groupby("n", as_index=False)["y"].mean()
-        ave_df["h"] = np.ones_like(ave_df["y"]) * h
-        ave_dfs.append(ave_df)
-    ave_regimes_df = pd.concat(ave_dfs)
-    ave_regimes_df.columns = ["repeat", "response", "group"]
-    return ave_regimes_df
-
-
-def calc_log2_ratio(y_csv_fp):
-    y_df = pd.read_csv(y_csv_fp)
-    if "class" in y_df.columns:
-        for c in y_df["class"].unique():
-            for r in y_df["repeat"].unique():
-                ygi = y_df.loc[(y_df["class"] == c) & (y_df["repeat"] == r), "response"]
-                y_df.loc[(y_df["class"] == c) & (y_df["repeat"] == r), "response"] = np.log2(ygi / ygi.iloc[0])
-    else:
-        for r in y_df["repeat"].unique():
-            ygi = y_df.loc[(y_df["repeat"] == r), "response"]
-            y_df.loc[(y_df["repeat"] == r), "response"] = np.log2(ygi / ygi.iloc[0])
-    return y_df
