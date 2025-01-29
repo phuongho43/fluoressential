@@ -34,10 +34,7 @@ dependencies = [
 Repository = "https://github.com/phuongho43/fluoressential"
 
 [project.scripts]
-process_imgs = "fluoressential.process_imgs:main"
-plot_dynamics = "fluoressential.plot_dynamics:main"
-plot_groups = "fluoressential.plot_groups:main"
-plot_fc = "fluoressential.plot_fc:main"
+analyze_dynamics = "fluoressential.analyze_dynamics:main"
 
 [tool.uv]
 dev-dependencies = [

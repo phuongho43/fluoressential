@@ -11,25 +11,22 @@ from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 from fluoressential.style import STYLE
 
 
-def plot_fluor_img(
-    fig_fp, img, cbar_max=None, t_unit=None, sb_microns=None, sig_ann=False, regions=None, centroids=None, roi_n0=0
-):
+def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, note_stim=False, regions=None, centroids=None):
     """Plot and annotate a fluorescence microscopy image.
 
     Args:
         fig_fp (str): absolute filepath for saving the figure
         img (2D array): processed fluorescence image
         cbar_max (float): maximum value for the colormap scale and colorbar
-        t_unit (str): unit for the annotated timestamp
-        sb_microns (int): the length in microns equivalent to 200 pixels
+        sbar_microns (int): the length in microns equivalent to 200 pixels
             for the scalebar text annotation (specify None for no scalebar)
-        sig_ann (bool): whether to draw a blue outline around the whole image to denote
+        t_unit (str): unit for the annotated timestamp
+        note_stim (bool): whether to draw a blue outline around the whole image to denote
             input signal/stimuli exposure
         regions (2D array): binary image for drawing white outlines denoting regions of interest
             TRUE = foreground; FALSE = background
         centroids (dict): {n: (y, x)} coordinates of centroids for annotating ROIs
             with their assigned number
-        roi_n0 (int): starting number of the roi counter
     """
     with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
         fig, ax = plt.subplots(figsize=(24, 16))
@@ -39,24 +36,24 @@ def plot_fluor_img(
             timepoint = os.path.splitext(os.path.basename(fig_fp))[0]
             t_text = "t = " + timepoint + t_unit
             ax.text(
-                0.05,
-                0.95,
+                0.02,
+                0.98,
                 t_text,
                 ha="left",
-                va="center_baseline",
+                va="top",
                 color="white",
-                fontsize=64,
+                fontsize=STYLE["font.size"],
                 weight="bold",
                 transform=ax.transAxes,
             )
-        if sb_microns is not None:
-            fontprops = font_manager.FontProperties(size=80, weight="bold")
+        if sbar_microns is not None:
+            fontprops = font_manager.FontProperties(size=STYLE["font.size"], weight="bold")
             asb = AnchoredSizeBar(
                 ax.transData,
                 200,
-                f"{sb_microns}\u03bcm",
+                f"{sbar_microns}\u03bcm",
                 color="white",
-                size_vertical=8,
+                size_vertical=20,
                 fontproperties=fontprops,
                 loc="lower left",
                 pad=0,
@@ -65,21 +62,18 @@ def plot_fluor_img(
                 frameon=False,
             )
             ax.add_artist(asb)
-        if sig_ann:
+        if note_stim:
             w, h = img.shape
             ax.add_patch(mpatches.Rectangle((2, 2), w - 7, h - 7, linewidth=10, edgecolor="#648FFF", facecolor="none"))
-        cb = fig.colorbar(
-            axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=np.linspace(np.min(img), cbar_max, 10)
-        )
-        cb.outline.set_linewidth(0)
-        cb.ax.tick_params(labelsize=84)
-        fig.tight_layout(pad=0)
+        cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cbar_max])
+        cb.outline.set_linewidth(1)
+        cb.ax.tick_params(length=24, width=12, pad=6)
         if regions is not None:
             ax.contour(regions, linewidths=3, colors="w")
             if centroids is not None:
                 for num, (y, x) in centroids.items():
                     ax.annotate(
-                        str(roi_n0 + num),
+                        str(num),
                         xy=(x, y),
                         xycoords="data",
                         color="white",
@@ -90,11 +84,11 @@ def plot_fluor_img(
         ax.grid(False)
         ax.axis("off")
         fig.canvas.draw()
-        fig.savefig(fig_fp, dpi=100, bbox_inches="tight", pad_inches=0)
-        plt.close("all")
+        fig.savefig(fig_fp, dpi=100)
+    plt.close("all")
 
 
-def plot_bgd_prof(fig_fp, img, bgd):
+def plot_bgd(fig_fp, img, bgd):
     """Plot a line profile of the raw image and approximated background.
 
     Manual quality check for the background subtraction step.
@@ -111,5 +105,5 @@ def plot_bgd_prof(fig_fp, img, bgd):
         fig, ax = plt.subplots(figsize=(24, 20))
         ax.plot(img[bg_row, :], color="#648FFF")
         ax.plot(bgd[bg_row, :], color="#785EF0")
-        fig.savefig(fig_fp, pad_inches=0, bbox_inches="tight", transparent=False, dpi=100)
-        plt.close("all")
+        fig.savefig(fig_fp, dpi=100)
+    plt.close("all")
