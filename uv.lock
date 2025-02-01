@@ -181,19 +181,6 @@ wheels = [
 ]
 
 [[package]]
-name = "fcsparser"
-version = "0.2.8"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy" },
-    { name = "pandas" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/7b/b8decfe3b0e6c2aca4e9069bb80f54960fe6405a6bf63c01a9ca685ba5c6/fcsparser-0.2.8.tar.gz", hash = "sha256:df0436bf678df1f4ad3274e55fa06773f884fa45d8329015913a6178d10c73ea", size = 14538608 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/10/bfdc8e5b35896d8134a9637ce51c6686f60d8a10fe511de2e07accb8b407/fcsparser-0.2.8-py3-none-any.whl", hash = "sha256:833b02ceff18f34c9304681f5b6675039f5b39a31dfdd9640881f43223bcc2ab", size = 14613064 },
-]
-
-[[package]]
 name = "filelock"
 version = "3.16.1"
 source = { registry = "https://pypi.org/simple" }
@@ -216,7 +203,6 @@ name = "fluoressential"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
-    { name = "fcsparser" },
     { name = "filetype" },
     { name = "joblib" },
     { name = "matplotlib" },
@@ -240,7 +226,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "fcsparser", specifier = ">=0.2.8" },
     { name = "filetype", specifier = ">=1.2.0" },
     { name = "joblib", specifier = ">=1.4.2" },
     { name = "matplotlib", specifier = ">=3.9.2" },

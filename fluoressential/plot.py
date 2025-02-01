@@ -1,17 +1,16 @@
-import os
+from pathlib import Path
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from matplotlib import font_manager
-from matplotlib import patches as mpatches
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 
 from fluoressential.style import STYLE
 
 
-def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, note_stim=False, regions=None, centroids=None):
+def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, regions=None, centroids=None):
     """Plot and annotate a fluorescence microscopy image.
 
     Args:
@@ -21,8 +20,6 @@ def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, note_st
         sbar_microns (int): the length in microns equivalent to 200 pixels
             for the scalebar text annotation (specify None for no scalebar)
         t_unit (str): unit for the annotated timestamp
-        note_stim (bool): whether to draw a blue outline around the whole image to denote
-            input signal/stimuli exposure
         regions (2D array): binary image for drawing white outlines denoting regions of interest
             TRUE = foreground; FALSE = background
         centroids (dict): {n: (y, x)} coordinates of centroids for annotating ROIs
@@ -33,8 +30,8 @@ def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, note_st
         axim = ax.imshow(img, cmap="turbo")
         axim.set_clim(0.0, cbar_max)
         if t_unit is not None:
-            timepoint = os.path.splitext(os.path.basename(fig_fp))[0]
-            t_text = "t = " + timepoint + t_unit
+            timepoint = Path(fig_fp).stem
+            t_text = timepoint + t_unit
             ax.text(
                 0.02,
                 0.98,
@@ -62,9 +59,6 @@ def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, note_st
                 frameon=False,
             )
             ax.add_artist(asb)
-        if note_stim:
-            w, h = img.shape
-            ax.add_patch(mpatches.Rectangle((2, 2), w - 7, h - 7, linewidth=10, edgecolor="#648FFF", facecolor="none"))
         cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cbar_max])
         cb.outline.set_linewidth(1)
         cb.ax.tick_params(length=24, width=12, pad=6)

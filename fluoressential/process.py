@@ -25,7 +25,7 @@ def list_img_fps(dp):
     return img_fps
 
 
-def subtract_bgd(img, n_thr=1, gau_scale=1, vert_scale=1, ct_cutoff=0.1):
+def subtract_bgd(img, n_thr=2, gau_scale=1, vert_scale=2, ct_cutoff=0.1):
     """Subract background noise from fluorescence image.
 
     1. Generate an approximation of the background by thresholding away the bright features.
@@ -52,11 +52,10 @@ def subtract_bgd(img, n_thr=1, gau_scale=1, vert_scale=1, ct_cutoff=0.1):
         tha = tha[tha < thr]
     fbg = bgd[bgd > thr]
     contrast = np.round(np.std(fbg) / np.mean(fbg), 2)
-    if contrast < ct_cutoff:
-        bgd = gaussian(bgd, 25 * gau_scale) + 1 * shift * vert_scale
-    else:
+    # print(contrast)
+    if contrast > ct_cutoff:
         bgd[bgd > thr] = thr
-        bgd = gaussian(bgd, 50 * gau_scale) + 2 * shift * vert_scale
+    bgd = gaussian(bgd, 25 * gau_scale) + shift * vert_scale
     bgd[bgd < 0] = 0
     img = img - bgd
     img[img < 0] = 0
@@ -78,8 +77,8 @@ def calc_cbar_max(imgs_dp):
     img_fps = list_img_fps(imgs_dp)
     max_vals = [np.percentile(img_as_float(imread(img_fp)), 99.99) for img_fp in img_fps]
     max_img_fp = img_fps[np.argmax(max_vals)]
-    max_img = subtract_bgd(img_as_float(imread(max_img_fp)), n_thr=3, gau_scale=3, vert_scale=0)[0]
-    cbar_max = np.percentile(max_img, 100)
+    max_img = subtract_bgd(img_as_float(imread(max_img_fp)), n_thr=2, gau_scale=2, vert_scale=1)[0]
+    cbar_max = np.percentile(max_img, 99.99)
     return cbar_max
 
 
