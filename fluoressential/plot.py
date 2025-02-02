@@ -10,13 +10,14 @@ from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 from fluoressential.style import STYLE
 
 
-def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, regions=None, centroids=None):
+def plot_img(fig_fp, img, cmax=None, show_cbar=False, sbar_microns=None, t_unit=None, regions=None, centroids=None):
     """Plot and annotate a fluorescence microscopy image.
 
     Args:
         fig_fp (str): absolute filepath for saving the figure
         img (2D array): processed fluorescence image
-        cbar_max (float): maximum value for the colormap scale and colorbar
+        cmax (float): max pixel intensity or upper limit of the color scale
+        show_cbar (bool): whether to plot a colorbar
         sbar_microns (int): the length in microns equivalent to 200 pixels
             for the scalebar text annotation (specify None for no scalebar)
         t_unit (str): unit for the annotated timestamp
@@ -28,7 +29,8 @@ def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, regions
     with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
         fig, ax = plt.subplots(figsize=(24, 16))
         axim = ax.imshow(img, cmap="turbo")
-        axim.set_clim(0.0, cbar_max)
+        cmax = np.max(img) if cmax is None else cmax
+        axim.set_clim(0.0, cmax)
         if t_unit is not None:
             timepoint = Path(fig_fp).stem
             t_text = timepoint + t_unit
@@ -59,9 +61,10 @@ def plot_img(fig_fp, img, cbar_max=None, sbar_microns=None, t_unit=None, regions
                 frameon=False,
             )
             ax.add_artist(asb)
-        cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cbar_max])
-        cb.outline.set_linewidth(1)
-        cb.ax.tick_params(length=24, width=12, pad=6)
+        if show_cbar:
+            cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cmax])
+            cb.outline.set_linewidth(1)
+            cb.ax.tick_params(length=24, width=12, pad=6)
         if regions is not None:
             ax.contour(regions, linewidths=3, colors="w")
             if centroids is not None:
