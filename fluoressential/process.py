@@ -72,3 +72,10 @@ def calc_imgs_cmax(imgs_dp, sub_bgd_kwargs):
     max_img = subtract_bgd(img_as_float(imread(max_img_fp)), **sub_bgd_kwargs)[0]
     cmax = np.percentile(max_img, 99.99)
     return cmax
+
+
+def calc_dF_F0(y_df):
+    F0 = y_df["y"].iloc[:5].mean()
+    dF = y_df["y"] - F0
+    y_df["y"] = dF / F0
+    return y_df

@@ -99,8 +99,24 @@ def plot_bgd(fig_fp, img, bgd):
         bg_rows = np.argsort(np.var(img, axis=1))[-100:-1:10]
         row_i = np.random.choice(bg_rows.shape[0])
         bg_row = bg_rows[row_i]
-        fig, ax = plt.subplots(figsize=(24, 20))
+        fig, ax = plt.subplots(figsize=(24, 16))
         ax.plot(img[bg_row, :], color="#648FFF")
         ax.plot(bgd[bg_row, :], color="#785EF0")
+        fig.savefig(fig_fp, dpi=100)
+    plt.close("all")
+
+
+def plot_ty(fig_fp, ty_df, xlabel, ylabel):
+    fig_fp = Path(fig_fp)
+    fig_fp.parent.mkdir(parents=True, exist_ok=True)
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
+        fig, ax = plt.subplots(figsize=(24, 16))
+        sns.lineplot(ax=ax, data=ty_df, x="t", y="y", color="#785EF0")
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.locator_params(axis="x", nbins=10)
+        ax.locator_params(axis="y", nbins=10)
+        fig.tight_layout()
+        fig.canvas.draw()
         fig.savefig(fig_fp, dpi=100)
     plt.close("all")

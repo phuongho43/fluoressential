@@ -8,8 +8,8 @@ from natsort import natsorted
 from skimage import img_as_float
 from skimage.io import imread
 
-from fluoressential.plot import plot_bgd, plot_img
-from fluoressential.process import calc_imgs_cmax, list_img_fps, subtract_bgd
+from fluoressential.plot import plot_bgd, plot_img, plot_ty
+from fluoressential.process import calc_dF_F0, calc_imgs_cmax, list_img_fps, subtract_bgd
 
 
 def img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs):
@@ -41,6 +41,7 @@ def analyze_imgs(rep_dp, gau_scale=1, vert_scale=2, ct_cutoff=0.1, cmax=None, sh
     df = pd.DataFrame(data)
     y_csv_fp = results_dp / "y.csv"
     df.to_csv(y_csv_fp, index=False)
+    return df
 
 
 def main():
@@ -80,7 +81,12 @@ def main():
     for class_dp in [Path(class_dp) for class_dp in class_dps]:
         for rep_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
             print(rep_dp)
-            analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.05, cmax=None, show_cbar=True, sbar_microns=22, t_unit="s")
+            ty_df = analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.05, cmax=None, show_cbar=True, sbar_microns=22, t_unit="s")
+            ty_df = calc_dF_F0(ty_df.astype(float))
+            fig_fp = rep_dp / "results" / "y.png"
+            xlabel = "Time (s)"
+            ylabel = r"$\mathbf{\Delta F/F_{0}}$"
+            plot_ty(fig_fp, ty_df, xlabel=xlabel, ylabel=ylabel)
 
     ## RFP Reporter Expression ##
     ## 293T Input Intensity ##
