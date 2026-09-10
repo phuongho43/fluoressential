@@ -26,7 +26,9 @@ def plot_img(fig_fp, img, cmax=None, show_cbar=False, sbar_microns=None, t_unit=
         centroids (dict): {n: (y, x)} coordinates of centroids for annotating ROIs
             with their assigned number
     """
-    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
+    # rc_context is typed to take a dict keyed by the Literal union of every rcParam name,
+    # which no caller-built dict can satisfy; a plain dict is what the docs show.
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):  # type: ignore[arg-type]
         fig, ax = plt.subplots(figsize=(24, 16))
         axim = ax.imshow(img, cmap="turbo")
         cmax = np.max(img) if cmax is None else cmax
@@ -63,11 +65,7 @@ def plot_img(fig_fp, img, cmax=None, show_cbar=False, sbar_microns=None, t_unit=
             ax.add_artist(asb)
         if show_cbar:
             cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cmax])
-            # Suppressed because matplotlib's stub is wrong, not this call: colorbar.pyi
-            # declares _ColorbarSpine as a subclass of Spines (the str->Spine mapping) when
-            # at runtime it subclasses Spine (the artist). Spines.__getattr__ returns a
-            # Spine, so mypy resolves set_linewidth to a Spine and objects to it being called.
-            cb.outline.set_linewidth(1)  # type: ignore[operator]
+            cb.outline.set_linewidth(1)
             cb.ax.tick_params(length=24, width=12, pad=6)
         if regions is not None:
             ax.contour(regions, linewidths=3, colors="w")
@@ -99,7 +97,9 @@ def plot_bgd(fig_fp, img, bgd):
         img (2D array): the raw/unprocessed image before background subtraction
         bgd (2D array): the approx background image
     """
-    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
+    # rc_context is typed to take a dict keyed by the Literal union of every rcParam name,
+    # which no caller-built dict can satisfy; a plain dict is what the docs show.
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):  # type: ignore[arg-type]
         bg_rows = np.argsort(np.var(img, axis=1))[-100:-1:10]
         row_i = np.random.choice(bg_rows.shape[0])
         bg_row = bg_rows[row_i]
@@ -113,7 +113,9 @@ def plot_bgd(fig_fp, img, bgd):
 def plot_ty(fig_fp, ty_df, xlabel, ylabel):
     fig_fp = Path(fig_fp)
     fig_fp.parent.mkdir(parents=True, exist_ok=True)
-    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):
+    # rc_context is typed to take a dict keyed by the Literal union of every rcParam name,
+    # which no caller-built dict can satisfy; a plain dict is what the docs show.
+    with sns.axes_style("whitegrid"), mpl.rc_context(STYLE):  # type: ignore[arg-type]
         fig, ax = plt.subplots(figsize=(24, 16))
         sns.lineplot(ax=ax, data=ty_df, x="t", y="y", color="#785EF0")
         ax.set_xlabel(xlabel)
