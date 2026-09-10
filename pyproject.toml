@@ -53,6 +53,12 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 py-modules = ["fluoressential"]
 
+[tool.deptry.per_rule_ignores]
+# pywavelets is never imported here. process.py uses skimage.restoration.estimate_sigma,
+# which is a wavelet-based noise estimator and needs it at runtime -- a real dependency
+# that deptry cannot see because the import happens inside scikit-image.
+DEP002 = ["pywavelets"]
+
 [tool.mypy]
 files = ["fluoressential"]
 # Annotating this research code was never done and is not a prerequisite for depositing it.

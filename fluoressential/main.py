@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 from natsort import natsorted
-from skimage import img_as_float
 from skimage.io import imread
+from skimage.util import img_as_float
 
 from fluoressential.plot import plot_bgd, plot_img
 from fluoressential.process import calc_imgs_cmax, list_img_fps, subtract_bgd
@@ -37,7 +37,7 @@ def analyze_imgs(rep_dp, gau_scale=1, vert_scale=2, ct_cutoff=0.1, cmax=None, sh
     sub_bgd_kwargs = {"gau_scale": gau_scale, "vert_scale": vert_scale, "ct_cutoff": ct_cutoff}
     cmax = calc_imgs_cmax(dat_imgs_dp, sub_bgd_kwargs) if cmax is None else cmax
     plot_img_kwargs = {"cmax": cmax, "show_cbar": show_cbar, "sbar_microns": sbar_microns, "t_unit": t_unit}
-    data = Parallel(n_jobs=max(1, os.cpu_count() - 1))(delayed(img_task)(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs) for img_fp in list_img_fps(dat_imgs_dp))
+    data = Parallel(n_jobs=max(1, (os.cpu_count() or 1) - 1))(delayed(img_task)(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs) for img_fp in list_img_fps(dat_imgs_dp))
     df = pd.DataFrame(data)
     y_csv_fp = results_dp / "y.csv"
     df.to_csv(y_csv_fp, index=False)

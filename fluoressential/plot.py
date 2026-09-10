@@ -63,7 +63,11 @@ def plot_img(fig_fp, img, cmax=None, show_cbar=False, sbar_microns=None, t_unit=
             ax.add_artist(asb)
         if show_cbar:
             cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cmax])
-            cb.outline.set_linewidth(1)
+            # Suppressed because matplotlib's stub is wrong, not this call: colorbar.pyi
+            # declares _ColorbarSpine as a subclass of Spines (the str->Spine mapping) when
+            # at runtime it subclasses Spine (the artist). Spines.__getattr__ returns a
+            # Spine, so mypy resolves set_linewidth to a Spine and objects to it being called.
+            cb.outline.set_linewidth(1)  # type: ignore[operator]
             cb.ax.tick_params(length=24, width=12, pad=6)
         if regions is not None:
             ax.contour(regions, linewidths=3, colors="w")

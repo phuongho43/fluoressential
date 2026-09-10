@@ -3,10 +3,10 @@ from pathlib import Path
 import numpy as np
 from filetype import is_image
 from natsort import natsorted
-from skimage import img_as_float
 from skimage.filters import gaussian, threshold_li
 from skimage.io import imread
 from skimage.restoration import estimate_sigma
+from skimage.util import img_as_float
 
 
 def list_img_fps(dp):

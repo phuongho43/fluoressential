@@ -1,6 +1,8 @@
+from typing import Any
+
 PALETTE = ["#8069EC", "#EA822C", "#2ECC71", "#D143A4", "#F1C40F", "#34495E", "#648FFF"]
 
-STYLE = {
+STYLE: dict[str, Any] = {
     "figure.figsize": (24, 16),
     "lines.linewidth": 16,
     "lines.markersize": 24,
