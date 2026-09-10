@@ -8,8 +8,8 @@ from natsort import natsorted
 from skimage import img_as_float
 from skimage.io import imread
 
-from fluoressential.plot import plot_bgd, plot_img, plot_ty
-from fluoressential.process import calc_dF_F0, calc_imgs_cmax, list_img_fps, subtract_bgd
+from fluoressential.plot import plot_bgd, plot_img
+from fluoressential.process import calc_imgs_cmax, list_img_fps, subtract_bgd
 
 
 def img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs):
@@ -45,89 +45,120 @@ def analyze_imgs(rep_dp, gau_scale=1, vert_scale=2, ct_cutoff=0.1, cmax=None, sh
 
 
 def main():
-    ## Analyze Single Image ##
-    ## Figure 2B ##
-    img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/imgs/60.1.tiff"
-    results_dp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/results"
-    sub_bgd_kwargs = {"gau_scale": 4, "vert_scale": 2, "ct_cutoff": 0.05}
-    plot_img_kwargs = {"cmax": 0.03, "show_cbar": False, "sbar_microns": 22, "t_unit": None}
-    img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
-    img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/imgs/61.9.tiff"
-    plot_img_kwargs = {"cmax": 0.03, "show_cbar": True, "sbar_microns": None, "t_unit": None}
-    img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
-    ## Figure 2E ##
-    img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/imgs/60.1.tiff"
-    results_dp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/results"
-    sub_bgd_kwargs = {"gau_scale": 4, "vert_scale": 2, "ct_cutoff": 0.05}
-    plot_img_kwargs = {"cmax": 0.02, "show_cbar": False, "sbar_microns": 22, "t_unit": None}
-    img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
-    img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/imgs/61.9.tiff"
-    plot_img_kwargs = {"cmax": 0.02, "show_cbar": True, "sbar_microns": None, "t_unit": None}
-    img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
+    # ## Analyze Single Image ##
+    # ## Figure 2B ##
+    # img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/imgs/60.1.tiff"
+    # results_dp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/results"
+    # sub_bgd_kwargs = {"gau_scale": 4, "vert_scale": 2, "ct_cutoff": 0.05}
+    # plot_img_kwargs = {"cmax": 0.03, "show_cbar": False, "sbar_microns": 22, "t_unit": None}
+    # img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
+    # img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/1--LOVfast/1/imgs/61.9.tiff"
+    # plot_img_kwargs = {"cmax": 0.03, "show_cbar": True, "sbar_microns": None, "t_unit": None}
+    # img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
+    # ## Figure 2E ##
+    # img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/imgs/60.1.tiff"
+    # results_dp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/results"
+    # sub_bgd_kwargs = {"gau_scale": 4, "vert_scale": 2, "ct_cutoff": 0.05}
+    # plot_img_kwargs = {"cmax": 0.02, "show_cbar": False, "sbar_microns": 22, "t_unit": None}
+    # img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
+    # img_fp = "/home/phuong/data/phd-project/1--biosensor/6--examples/3--iLIDfast/0/imgs/61.9.tiff"
+    # plot_img_kwargs = {"cmax": 0.02, "show_cbar": True, "sbar_microns": None, "t_unit": None}
+    # img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
 
-    ## ddFP Biosensor Dynamics ##
-    class_dps = [
-        "/home/phuong/data/phd-project/1--biosensor/0--ddFP/",
-        "/home/phuong/data/phd-project/1--biosensor/1--LOV/0--I427V/",
-        "/home/phuong/data/phd-project/1--biosensor/1--LOV/1--V416I/",
-        "/home/phuong/data/phd-project/1--biosensor/2--intensity/0--LOVfast-BL20uW/",
-        "/home/phuong/data/phd-project/1--biosensor/2--intensity/1--LOVfast-BL200uW/",
-        "/home/phuong/data/phd-project/1--biosensor/3--iLID/0--I427V/",
-        "/home/phuong/data/phd-project/1--biosensor/3--iLID/1--V416I/",
-        "/home/phuong/data/phd-project/1--biosensor/4--linker/0--iLIDslow-13AA/",
-        "/home/phuong/data/phd-project/1--biosensor/4--linker/1--iLIDslow-20AA/",
-        "/home/phuong/data/phd-project/1--biosensor/5--decoder/0--sparse-ddFP/",
-    ]
-    for class_dp in [Path(class_dp) for class_dp in class_dps]:
-        for rep_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            print(rep_dp)
-            ty_df = analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.05, cmax=None, show_cbar=True, sbar_microns=22, t_unit="s")
-            ty_df = calc_dF_F0(ty_df.astype(float))
-            fig_fp = rep_dp / "results" / "y.png"
-            xlabel = "Time (s)"
-            ylabel = r"$\mathbf{\Delta F/F_{0}}$"
-            plot_ty(fig_fp, ty_df, xlabel=xlabel, ylabel=ylabel)
+    # ## ddFP Biosensor Dynamics ##
+    # class_dps = [
+    #     # "/home/phuong/data/phd-project/1--biosensor/0--ddFP/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/1--LOV/0--I427V/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/1--LOV/1--V416I/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/2--intensity/0--LOVfast-BL20uW/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/2--intensity/1--LOVfast-BL200uW/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/3--iLID/0--I427V/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/3--iLID/1--V416I/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/4--linker/0--iLIDslow-13AA/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/4--linker/1--iLIDslow-20AA/",
+    #     # "/home/phuong/data/phd-project/1--biosensor/5--decoder/0--sparse-ddFP/",
+    #     "/home/phuong/data/phd-project/1--biosensor/7--decoder-new/0--plain-ddFP/",
+    #     "/home/phuong/data/phd-project/1--biosensor/7--decoder-new/1--dense-ddFP/",
+    #     "/home/phuong/data/phd-project/1--biosensor/7--decoder-new/2--sparse-ddFP/",
+    # ]
+    # for class_dp in [Path(class_dp) for class_dp in class_dps]:
+    #     for rep_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         print(rep_dp)
+    #         ty_df = analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.05, cmax=None, show_cbar=True, sbar_microns=22, t_unit="s")
+    #         ty_df = calc_dF_F0(ty_df.astype(float))
+    #         fig_fp = rep_dp / "results" / "y.png"
+    #         xlabel = "Time (s)"
+    #         ylabel = r"$\mathbf{\Delta F/F_{0}}$"
+    #         plot_ty(fig_fp, ty_df, xlabel=xlabel, ylabel=ylabel)
 
-    ## RFP Reporter Expression ##
-    ## 293T Input Intensity ##
-    expt_dp = "/home/phuong/data/phd-project/3--expression/0--293T-intensity/"
-    for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
-        for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
-                print(rep_dp)
-                analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.1, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+    # ## RFP Reporter Expression ##
+    # ## 293T Input Intensity ##
+    # expt_dp = "/home/phuong/data/phd-project/3--expression/0--293T-intensity/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.1, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
 
-    ## 293T Single FM ##
-    expt_dp = "/home/phuong/data/phd-project/3--expression/1--293T-FM-single/"
-    for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
-        for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
-                print(rep_dp)
-                analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+    # ## 293T Single FM ##
+    # expt_dp = "/home/phuong/data/phd-project/3--expression/1--293T-FM-single/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
 
-    ## 293T LOVfast vs iLIDslow ##
-    expt_dp = "/home/phuong/data/phd-project/3--expression/2--293T-iLID-vs-LOV/"
-    for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
-        for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
-                print(rep_dp)
-                analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+    # ## 293T LOVfast vs iLIDslow ##
+    # expt_dp = "/home/phuong/data/phd-project/3--expression/2--293T-iLID-vs-LOV/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
 
-    ## 293T Dual FM ##
-    expt_dp = "/home/phuong/data/phd-project/3--expression/3--293T-FM-dual/"
-    for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
-        for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
-                print(rep_dp)
-                analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+    # ## 293T Dual FM ##
+    # expt_dp = "/home/phuong/data/phd-project/3--expression/3--293T-FM-dual/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
 
-    ## K562 Single FM ##
-    expt_dp = "/home/phuong/data/phd-project/3--expression/4--K562-FM-single/"
-    for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
-        for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
-            for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
-                print(rep_dp)
-                analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+    # ## K562 Single FM ##
+    # expt_dp = "/home/phuong/data/phd-project/3--expression/4--K562-FM-single/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=4, vert_scale=2, ct_cutoff=0.2, cmax=None, show_cbar=True, sbar_microns=220, t_unit=None)
+
+    # ## K562 GFPlig FM ## Figure S5 ##
+    # expt_dp = "/home/phuong/data/phd-project/5--differentiation/0--K562-fm-fplig/0--microscopy-images/"
+    # for class_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     for group_dp in [dp for dp in natsorted(class_dp.glob("*")) if dp.is_dir()]:
+    #         for rep_dp in [dp for dp in natsorted(group_dp.glob("*")) if dp.is_dir()]:
+    #             print(rep_dp)
+    #             analyze_imgs(rep_dp, gau_scale=2, vert_scale=3, ct_cutoff=0.15, cmax=0.08, show_cbar=None, sbar_microns=None, t_unit=None)
+
+    # ## 293T Const FPlig Co-Culture ##
+    # expt_dp = "/home/phuong/data/phd-project/5--differentiation/1--293T-const-FPlig/"
+    # for group_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+    #     imgs_dp = group_dp / "imgs"
+    #     results_dp = group_dp / "results"
+    #     sub_bgd_kwargs = {"gau_scale": 2, "vert_scale": 1, "ct_cutoff": 0.1}
+    #     plot_img_kwargs = {"cmax": 0.01, "show_cbar": False, "sbar_microns": None, "t_unit": None}
+    #     for img_fp in list_img_fps(imgs_dp):
+    #         img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
+
+    ## img group ##
+    expt_dp = "/home/phuong/data/dual_diff/proc-data/20250319/"
+    for group_dp in [dp for dp in natsorted(Path(expt_dp).glob("*")) if dp.is_dir()]:
+        imgs_dp = group_dp / "imgs"
+        results_dp = group_dp / "results"
+        sub_bgd_kwargs = {"gau_scale": 2, "vert_scale": 1, "ct_cutoff": 0.1}
+        plot_img_kwargs = {"cmax": 0.5, "show_cbar": False, "sbar_microns": None, "t_unit": None}
+        for img_fp in list_img_fps(imgs_dp):
+            img_task(img_fp, results_dp, sub_bgd_kwargs, plot_img_kwargs)
 
     print("\a")
 
