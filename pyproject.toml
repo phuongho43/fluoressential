@@ -70,7 +70,10 @@ ignore_missing_imports = true
 no_implicit_optional = true
 check_untyped_defs = true
 warn_return_any = true
-warn_unused_ignores = true
+# Off deliberately. The CI matrix spans Python 3.10 to 3.13, which resolve different
+# matplotlib versions with different stub bugs, so a suppression that is required on one
+# version is redundant on another. There is no single set of ignores that is exact everywhere.
+warn_unused_ignores = false
 show_error_codes = true
 
 [tool.pytest.ini_options]

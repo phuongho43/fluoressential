@@ -65,7 +65,10 @@ def plot_img(fig_fp, img, cmax=None, show_cbar=False, sbar_microns=None, t_unit=
             ax.add_artist(asb)
         if show_cbar:
             cb = fig.colorbar(axim, pad=0.005, format="%.3f", extend="both", extendrect=True, ticks=[0.0, cmax])
-            cb.outline.set_linewidth(1)
+            # Needed on the matplotlib that Python 3.10 resolves, whose colorbar.pyi declares
+            # _ColorbarSpine as a Spines mapping rather than a Spine artist. Newer matplotlib
+            # fixed that, so this is redundant there -- hence warn_unused_ignores is off.
+            cb.outline.set_linewidth(1)  # type: ignore[operator]
             cb.ax.tick_params(length=24, width=12, pad=6)
         if regions is not None:
             ax.contour(regions, linewidths=3, colors="w")
